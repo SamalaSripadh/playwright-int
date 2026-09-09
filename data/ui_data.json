@@ -1,0 +1,10 @@
+{
+  "known_product": "Blue Top",
+  "missing_product": "Product That Does Not Exist",
+  "second_product": "Men Tshirt",
+  "registration_gender": "1",
+  "registration_day": "1",
+  "registration_month": "January",
+  "registration_year": "1990",
+  "registration_country": "Canada"
+}
