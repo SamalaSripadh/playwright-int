@@ -35,8 +35,8 @@ def create_account(page, data):
 
 
 @pytest.mark.sanity
-def test_checkout_summary_matches_cart_product(page, registration_data):
-    create_account(page, registration_data)
+def test_checkout_summary_matches_cart_product(auth_page):
+    page = auth_page
     pp = ProductsPage(page)
     pp.go_to_products_page()
     pp.add_product_to_cart(ui_data["known_product"])

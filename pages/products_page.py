@@ -7,7 +7,20 @@ class ProductsPage(BasePage):
         super().__init__(page)
 
     def go_to_products_page(self):
-        self.go_to_url("/products")
+        for _ in range(2):
+            try:
+                self.go_to_url("/products")
+                self.page.locator("#search_product").wait_for(
+                    state="visible",
+                    timeout=10000,
+                )
+                return
+            except PlaywrightTimeoutError:
+                continue
+        self.page.locator("#search_product").wait_for(
+            state="visible",
+            timeout=10000,
+        )
 
     def search_product(self, product_name):
         self.do_fill(self.page.locator("#search_product"), product_name)
@@ -22,8 +35,23 @@ class ProductsPage(BasePage):
     def is_empty_state_visible(self):
         return self.is_visible(".features_items .title")
 
+    def product_card(self, product_name):
+        product_name_locator = self.page.locator(".productinfo p").get_by_text(
+            product_name,
+            exact=True,
+        )
+        return self.page.locator(".single-products:visible").filter(
+            has=product_name_locator,
+        ).first
+
+    def product_id(self, product_name):
+        return self.product_card(product_name).locator("a.add-to-cart").first.get_attribute("data-product-id")
+
+    def visible_product_names(self):
+        return self.page.locator(".features_items .productinfo p").all_inner_texts()
+
     def add_product_to_cart(self, product_name):
-        product = self.page.locator(".single-products:visible").filter(has_text=product_name).first
+        product = self.product_card(product_name)
         product.hover()
         add_to_cart = product.locator(".productinfo a.add-to-cart")
         cart_modal = self.page.locator("#cartModal")

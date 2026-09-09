@@ -24,6 +24,9 @@ class CartPage(BasePage):
     def product_total(self, product_name):
         return self.product_row(product_name).locator(".cart_total").inner_text()
 
+    def product_id(self, product_name):
+        return self.product_row(product_name).get_attribute("id").replace("product-", "")
+
     def remove_product(self, product_name):
         self.product_row(product_name).locator(".cart_quantity_delete").click()
 
